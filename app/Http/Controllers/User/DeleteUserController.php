@@ -8,12 +8,14 @@ use App\Repositories\User\UserRepositoryInterface;
 
 class DeleteUserController extends Controller
 {
+    private UserRepositoryInterface $userRepository;
+
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
-    public function softDeleteUser($id)
+    public function softDeleteUser($id): \Illuminate\Http\RedirectResponse
     {
         $user = $this->userRepository->getUserById($id);
         $dataStatus = ['status' => User::STATUS_DELETED];
@@ -23,7 +25,7 @@ class DeleteUserController extends Controller
         return redirect()->route('users.index');
     }
 
-    public function delete($id)
+    public function delete($id): \Illuminate\Http\RedirectResponse
     {
         $user = $this->userRepository->getUserById($id);
         $user->forceDelete();

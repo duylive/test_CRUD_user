@@ -5,24 +5,27 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class UpdateUserController extends Controller
 {
+    private UserRepositoryInterface $userRepository;
+
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
-    public function edit($id)
+    public function edit($id): view
     {
         $user = $this->userRepository->getUserById($id);
         return view('users.edit', compact('user'));
     }
 
-    public function update($id, Request $request)
+    public function update($id, Request $request): \Illuminate\Http\RedirectResponse
     {
         try {
             $user = $this->userRepository->getUserById($id);
